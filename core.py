@@ -54,7 +54,7 @@ class Fighter:
         return 'Fighter:{}|Health:{}|Rage:{}!'.format(self.name, self.health,
                                                       self.rage)
 
-    def get_choice(self, other, decisionclea):
+    def get_choice(self, other, decision):
         if decision.title().strip() == 'attack'.title().strip(
         ) or decision.title().strip() == 'a'.title().strip():
             message = self.attack(other)
