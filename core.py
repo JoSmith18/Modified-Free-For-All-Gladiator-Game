@@ -93,6 +93,7 @@ class Saiyan(Fighter):
         self.name = name
         self.damage_low = damage_low
         self.damage_high = damage_high
+        self.action_string = '-- [a]ttack\n-- [h]eal\n-- [t]ransform\n-- [s]kip\n>>>'
 
     def __str__(self):
         return 'Saiyan {}| Health: {}| Rage: {}| Damage_Low: {}| Damage_High: {}!'.format(
@@ -118,7 +119,7 @@ class Saiyan(Fighter):
         actions = ['a', 's']
         if self.rage >= 10:
             actions.append('h')
-        if self.rage >= 80:
+        if self.rage >= 40:
             actions.append('t')
         return actions
 
@@ -130,6 +131,7 @@ class Ninja(Fighter):
         self.name = name
         self.damage_low = damage_low
         self.damage_high = damage_high
+        self.action_string = '-- [a]ttack\n-- [h]eal\n-- [j]utsu\n-- [s]kip\n>>>'
 
     def __str__(self):
         return 'Ninja {}| Health: {}| Rage: {}| Damage_Low: {}| Damage_High: {}!'.format(
@@ -168,6 +170,7 @@ class SoulReaper(Fighter):
         self.name = name
         self.damage_low = damage_low
         self.damage_high = damage_high
+        self.action_string = '-- [a]ttack\n-- [h]eal\n-- [r]ampage\n-- [s]kip\n>>>'
 
     def __str__(self):
         return 'SoulReaper {}| Health: {}| Rage: {}| Damage_Low: {}| Damage_High: {}!'.format(
@@ -192,6 +195,6 @@ class SoulReaper(Fighter):
         actions = ['a', 's']
         if self.rage >= 10:
             actions.append('h')
-        if self.rage >= 80:
+        if self.health <= 25:
             actions.append('r')
         return actions

@@ -3,8 +3,9 @@ from termcolor import colored, cprint
 from core import damage_finder, Fighter, Saiyan, Ninja, SoulReaper
 
 
-def my_choices(choices, choice):
+def my_choices(choices, action_string):
     while True:
+        choice = input(action_string)
         if choice in choices:
             return choice
         else:
@@ -41,49 +42,17 @@ def main():
     hits = 0
     while True:
         cprint(repr(fighter1), fighter1.text_color)
-        if type(fighter1) == Saiyan:
-            choices = fighter1.possible_actions()
-            choice = input(
-                colored(
-                    '-- [a]ttack\n-- [h]eal\n-- [t]ransform\n-- [s]kip\n>>>',
-                    'blue'))
-            decisions = my_choices(choices, choice)
-        elif type(fighter1) == Ninja:
-            choices = fighter1.possible_actions()
-            choice = input(
-                '-- [a]ttack\n-- [h]eal\n-- [j]utsu\n-- [s]kip\n>>>')
-            decisions = my_choices(choices, choice)
-        elif type(fighter1) == SoulReaper:
-            choices = fighter1.possible_actions()
-            choice = input(
-                '-- [a]ttack\n-- [h]eal\n-- [r]ampage\n-- [s]kip\n>>>')
-            decisions = my_choices(choices, choice)
-        message = fighter1.get_choice(fighter2, decisions)
-        cprint(message, 'blue', 'on_yellow')
+        decisions = my_choices(fighter1.possible_actions(),
+                               fighter1.action_string)
+        cprint(fighter1.get_choice(fighter2, decisions), 'blue', 'on_yellow')
         if Fighter.is_dead(fighter2):
             print('{} WINS!!'.format(fighter1.name))
             exit()
 
         cprint(repr(fighter2), fighter2.text_color)
-        if type(fighter2) == Saiyan:
-            choices = fighter2.possible_actions()
-            choice = input(
-                colored(
-                    '-- [a]ttack\n-- [h]eal\n-- [t]ransform\n-- [s]kip\n>>>',
-                    'blue'))
-            decisions = my_choices(choices, choice)
-        elif type(fighter2) == Ninja:
-            choices = fighter2.possible_actions()
-            choice = input(
-                '-- [a]ttack\n-- [h]eal\n-- [j]utsu\n-- [s]kip\n>>>')
-            decisions = my_choices(choices, choice)
-        elif type(fighter2) == SoulReaper:
-            choices = fighter2.possible_actions()
-            choice = input(
-                '-- [a]ttack\n-- [h]eal\n-- [r]ampage\n-- [s]kip\n>>>')
-            decisions = my_choices(choices, choice)
-        message = fighter2.get_choice(fighter1, decisions)
-        cprint(message, 'blue', 'on_grey')
+        decisions = my_choices(fighter2.possible_actions(),
+                               fighter2.action_string)
+        cprint(fighter2.get_choice(fighter1, decisions), 'blue', 'on_grey')
         if Fighter.is_dead(fighter1):
             print('{} WINS!!'.format(fighter2.name))
             exit()
