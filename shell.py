@@ -3,41 +3,8 @@ from termcolor import colored, cprint
 from core import damage_finder, Fighter, Saiyan, Ninja, SoulReaper
 
 
-def my_choices():
-    choices = ['attack', 'heal']
+def my_choices(choices, choice):
     while True:
-        choice = input('-- attack\n-- heal\n>>>')
-        if choice in choices:
-            return choice
-        else:
-            print('invalid choice')
-
-
-def saiyan_choices():
-    choices = ['attack', 'a', 'h', 'heal', 't', 'transform', 's', 'skip']
-    while True:
-        choice = input(
-            '-- [a]ttack\n-- [h]eal\n-- [t]ransform\n-- [s]kip\n>>>')
-        if choice in choices:
-            return choice
-        else:
-            print('invalid choice')
-
-
-def ninja_choices():
-    choices = ['attack', 'a', 'h', 'heal', 'j', 'jutsu', 's', 'skip']
-    while True:
-        choice = input('-- [a]ttack\n-- [h]eal\n-- [j]utsu\n-- [s]kip\n>>>')
-        if choice in choices:
-            return choice
-        else:
-            print('invalid choice')
-
-
-def soulreaper_choices():
-    choices = ['attack', 'a', 'h', 'heal', 'r', 'rampage', 's', 'skip']
-    while True:
-        choice = input('-- [a]ttack\n-- [h]eal\n-- [r]ampage\n-- [s]kip\n>>>')
         if choice in choices:
             return choice
         else:
@@ -69,19 +36,28 @@ def get_fighter(text_color, bg_color):
 
 
 def main():
-    fighter1 = get_fighter('red', 'on_cyan')
-    fighter2 = get_fighter('yellow', 'on_magenta')
+    fighter1 = get_fighter('red', 'on_grey')
+    fighter2 = get_fighter('yellow', 'on_grey')
     hits = 0
     while True:
         cprint(repr(fighter1), fighter1.text_color)
         if type(fighter1) == Saiyan:
-            decisions = saiyan_choices()
+            choices = fighter1.possible_actions()
+            choice = input(
+                colored(
+                    '-- [a]ttack\n-- [h]eal\n-- [t]ransform\n-- [s]kip\n>>>',
+                    'blue'))
+            decisions = my_choices(choices, choice)
         elif type(fighter1) == Ninja:
-            decisions = ninja_choices()
+            choices = fighter1.possible_actions()
+            choice = input(
+                '-- [a]ttack\n-- [h]eal\n-- [j]utsu\n-- [s]kip\n>>>')
+            decisions = my_choices(choices, choice)
         elif type(fighter1) == SoulReaper:
-            decisions = soulreaper_choices()
-        else:
-            decisions = my_choices()
+            choices = fighter1.possible_actions()
+            choice = input(
+                '-- [a]ttack\n-- [h]eal\n-- [r]ampage\n-- [s]kip\n>>>')
+            decisions = my_choices(choices, choice)
         message = fighter1.get_choice(fighter2, decisions)
         cprint(message, 'blue', 'on_yellow')
         if Fighter.is_dead(fighter2):
@@ -90,15 +66,24 @@ def main():
 
         cprint(repr(fighter2), fighter2.text_color)
         if type(fighter2) == Saiyan:
-            decisions = saiyan_choices()
+            choices = fighter2.possible_actions()
+            choice = input(
+                colored(
+                    '-- [a]ttack\n-- [h]eal\n-- [t]ransform\n-- [s]kip\n>>>',
+                    'blue'))
+            decisions = my_choices(choices, choice)
         elif type(fighter2) == Ninja:
-            decisions = ninja_choices()
+            choices = fighter2.possible_actions()
+            choice = input(
+                '-- [a]ttack\n-- [h]eal\n-- [j]utsu\n-- [s]kip\n>>>')
+            decisions = my_choices(choices, choice)
         elif type(fighter2) == SoulReaper:
-            decisions = soulreaper_choices()
-        else:
-            decisions = my_choices()
+            choices = fighter2.possible_actions()
+            choice = input(
+                '-- [a]ttack\n-- [h]eal\n-- [r]ampage\n-- [s]kip\n>>>')
+            decisions = my_choices(choices, choice)
         message = fighter2.get_choice(fighter1, decisions)
-        cprint(message, 'blue', 'on_yellow')
+        cprint(message, 'blue', 'on_grey')
         if Fighter.is_dead(fighter1):
             print('{} WINS!!'.format(fighter2.name))
             exit()

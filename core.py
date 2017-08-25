@@ -54,7 +54,7 @@ class Fighter:
         return 'Fighter:{}|Health:{}|Rage:{}!'.format(self.name, self.health,
                                                       self.rage)
 
-    def get_choice(self, other, decision):
+    def get_choice(self, other, decisionclea):
         if decision.title().strip() == 'attack'.title().strip(
         ) or decision.title().strip() == 'a'.title().strip():
             message = self.attack(other)
@@ -62,6 +62,22 @@ class Fighter:
         elif decision.title().strip() == 'heal'.title().strip(
         ) or decision.title().strip() == 'h'.title().strip():
             message = self.heal()
+            return message
+        elif decision.title().strip() == 'transform'.title().strip(
+        ) or decision.title().strip() == 't'.title().strip():
+            message = self.transform()
+            return message
+        elif decision.title().strip() == 'skip'.title().strip(
+        ) or decision.title().strip() == 's'.title().strip():
+            message = self.skip()
+            return message
+        elif decision.title().strip() == 'jutsu'.title().strip(
+        ) or decision.title().strip() == 'j'.title().strip():
+            message = self.jutsu(other)
+            return message
+        elif decision.title().strip() == 'rampage'.title().strip(
+        ) or decision.title().strip() == 'r'.title().strip():
+            message = self.hollow_form()
             return message
 
     def skip(self):
@@ -90,7 +106,7 @@ class Saiyan(Fighter):
     def transform(self):
         message = 'You Do Not Have Enough Rage!'
         if self.rage >= 80:
-            self.health += 10
+            self.health += 20
             self.damage_high += 10
             self.damage_low += 10
             self.rage = 20
@@ -98,24 +114,13 @@ class Saiyan(Fighter):
             return message
         return message
 
-    def get_choice(self, other, decision):
-        if decision.title().strip() == 'attack'.title().strip(
-        ) or decision.title().strip() == 'a'.title().strip():
-            message = self.attack(other)
-            return message
-        elif decision.title().strip() == 'heal'.title().strip(
-        ) or decision.title().strip() == 'h'.title().strip():
-            message = self.heal()
-            return message
-        elif decision.title().strip() == 'transform'.title().strip(
-        ) or decision.title().strip() == 't'.title().strip():
-            message = self.transform()
-            return message
-        elif decision.title().strip() == 'skip'.title().strip(
-        ) or decision.title().strip() == 's'.title().strip():
-            message = self.skip()
-            return message
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    def possible_actions(self):
+        actions = ['a', 's']
+        if self.rage >= 10:
+            actions.append('h')
+        if self.rage >= 80:
+            actions.append('t')
+        return actions
 
 
 class Ninja(Fighter):
@@ -147,23 +152,13 @@ class Ninja(Fighter):
             return message
         return message
 
-    def get_choice(self, other, decision):
-        if decision.title().strip() == 'attack'.title().strip(
-        ) or decision.title().strip() == 'a'.title().strip():
-            message = self.attack(other)
-            return message
-        elif decision.title().strip() == 'heal'.title().strip(
-        ) or decision.title().strip() == 'h'.title().strip():
-            message = self.heal()
-            return message
-        elif decision.title().strip() == 'jutsu'.title().strip(
-        ) or decision.title().strip() == 'j'.title().strip():
-            message = self.jutsu(other)
-            return message
-        elif decision.title().strip() == 'skip'.title().strip(
-        ) or decision.title().strip() == 's'.title().strip():
-            message = self.skip()
-            return message
+    def possible_actions(self):
+        actions = ['a', 's']
+        if self.rage >= 10:
+            actions.append('h')
+        if self.rage >= 80:
+            actions.append('j')
+        return actions
 
 
 class SoulReaper(Fighter):
@@ -193,24 +188,10 @@ class SoulReaper(Fighter):
             message = 'You Are Now On A Rampage!!!'
         return message
 
-    def get_choice(self, other, decision):
-
-        if decision.title().strip() == 'attack'.title().strip(
-        ) or decision.title().strip() == 'a'.title().strip():
-            message = self.attack(other)
-            return message
-
-        elif decision.title().strip() == 'heal'.title().strip(
-        ) or decision.title().strip() == 'h'.title().strip():
-            message = self.heal()
-            return message
-
-        elif decision.title().strip() == 'skip'.title().strip(
-        ) or decision.title().strip() == 's'.title().strip():
-            message = self.skip()
-            return message
-
-        elif decision.title().strip() == 'rampage'.title().strip(
-        ) or decision.title().strip() == 'r'.title().strip():
-            message = self.hollow_form()
-            return message
+    def possible_actions(self):
+        actions = ['a', 's']
+        if self.rage >= 10:
+            actions.append('h')
+        if self.rage >= 80:
+            actions.append('r')
+        return actions
