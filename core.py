@@ -164,3 +164,53 @@ class Ninja(Fighter):
         ) or decision.title().strip() == 's'.title().strip():
             message = self.skip()
             return message
+
+
+class SoulReaper(Fighter):
+    def __init__(self, name, damage_low, damage_high):
+        self.health = 100
+        self.rage = 25
+        self.name = name
+        self.damage_low = damage_low
+        self.damage_high = damage_high
+
+    def __str__(self):
+        return 'SoulReaper {}| Health: {}| Rage: {}| Damage_Low: {}| Damage_High: {}!'.format(
+            self.name, self.health, self.rage, self.damage_low,
+            self.damage_high)
+
+    def __repr__(self):
+        return 'SoulReaper {}| Health: {}| Rage: {}!'.format(
+            self.name, self.health, self.rage)
+
+    def hollow_form(self):
+        message = 'The Hollow Can Not Take Over'
+        if self.health <= 25:
+            self.health += 30
+            self.rage += 20
+            self.damage_high += 10
+            self.damage_low += 5
+            message = 'You Are Now On A Rampage!!!'
+        return message
+
+    def get_choice(self, other, decision):
+
+        if decision.title().strip() == 'attack'.title().strip(
+        ) or decision.title().strip() == 'a'.title().strip():
+            message = self.attack(other)
+            return message
+
+        elif decision.title().strip() == 'heal'.title().strip(
+        ) or decision.title().strip() == 'h'.title().strip():
+            message = self.heal()
+            return message
+
+        elif decision.title().strip() == 'skip'.title().strip(
+        ) or decision.title().strip() == 's'.title().strip():
+            message = self.skip()
+            return message
+
+        elif decision.title().strip() == 'rampage'.title().strip(
+        ) or decision.title().strip() == 'r'.title().strip():
+            message = self.hollow_form()
+            return message
