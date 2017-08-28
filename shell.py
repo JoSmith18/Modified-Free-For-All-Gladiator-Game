@@ -1,13 +1,18 @@
 import sys
 from termcolor import colored, cprint
-from core import damage_finder, Fighter, Saiyan, Ninja, SoulReaper
+from core import damage_finder, Fighter, get_class, get_is_dead, Battle
+from random import choice
 
 
-def my_choices(choices, action_string):
+def my_choices(choices, name):
     while True:
-        choice = input(action_string)
-        if choice in choices:
-            return choice
+        print('\n-- '.join(choices[1]))
+        choice = input('>>> {}: '.format(name))
+        if choice in choices[0]:
+            if choice in ['a', 'j']:
+                return choice, True
+            else:
+                return choice, False
         else:
             print('invalid choice')
 
@@ -25,39 +30,74 @@ def get_fighter(text_color, bg_color):
     name = input("What Is Your Name Fighter: ")
     damage_low, damage_high = damage_finder(10, 25)
     if fighter_type == 'Saiyan':
-        fighter = Saiyan(name, damage_low, damage_high)
+        fighter = Fighter('Saiyan', name, damage_low, damage_high)
     elif fighter_type == 'Ninja':
-        fighter = Ninja(name, damage_low, damage_high)
+        fighter = Fighter('Ninja', name, damage_low, damage_high)
     elif fighter_type == 'Soul Reaper' or fighter_type == 'Soul':
-        fighter = SoulReaper(name, damage_low, damage_high)
+        fighter = Fighter('Soul Reaper', name, damage_low, damage_high)
     setattr(fighter, 'text_color', text_color)
     setattr(fighter, 'bg_color', bg_color)
     cprint(fighter, fighter.text_color, fighter.bg_color, attrs=['bold'])
     return fighter
 
 
-def main():
-    fighter1 = get_fighter('red', 'on_grey')
-    fighter2 = get_fighter('yellow', 'on_grey')
-    hits = 0
+def amount_of_fighters():
+    fighters = []
     while True:
-        cprint(repr(fighter1), fighter1.text_color)
-        decisions = my_choices(fighter1.possible_actions(),
-                               fighter1.action_string)
-        cprint(fighter1.get_choice(fighter2, decisions), 'blue', 'on_yellow')
-        if Fighter.is_dead(fighter2):
-            print('{} WINS!!'.format(fighter1.name))
-            exit()
+        current_fighter = get_fighter('red', 'on_grey')
+        fighters.append(current_fighter)
+        answer = input(
+            colored('Is That The Last Fighter?\n', 'blue',
+                    'on_grey')).title().strip()
+        if answer == 'Yes' or answer == 'Y':
+            return fighters
 
-        cprint(repr(fighter2), fighter2.text_color)
-        decisions = my_choices(fighter2.possible_actions(),
-                               fighter2.action_string)
-        cprint(fighter2.get_choice(fighter1, decisions), 'blue', 'on_grey')
-        if Fighter.is_dead(fighter1):
-            print('{} WINS!!'.format(fighter2.name))
-            exit()
 
-        print('{}\n{}\n'.format(repr(fighter1), repr(fighter2)))
+def get_enemy(opponents):
+    while True:
+        enemy = input(
+            colored('Who Would You Like To Attack:\n{}\n'.format(
+                '\n'.join(opponents))))
+        if enemy in opponents:
+            return enemy
+        print('invalid choice')
+
+
+def get_fighters():
+    fighters = []
+    damage_low, damage_high = damage_finder(10, 25)
+    fighters.append(Fighter('Saiyan', 'Jo', damage_low, damage_high))
+    damage_low, damage_high = damage_finder(10, 25)
+    fighters.append(Fighter('Ninja', 'Bob', damage_low, damage_high))
+    damage_low, damage_high = damage_finder(10, 25)
+    fighters.append(Fighter('Soul Reaper', 'Tom', damage_low, damage_high))
+    return fighters
+
+
+def main():
+    battle = Battle(amount_of_fighters())
+    print(battle)
+    while True:
+        for warrior in battle.fighters:
+            if warrior.health <= 0:
+                continue
+            cprint(warrior, 'red', 'on_white')
+            decisions, need_opponent = my_choices(warrior.possible_actions(),
+                                                  warrior.name)
+            enemy = None
+            if need_opponent:
+                opponents = battle.get_opponents(warrior)
+                if len(opponents) > 1:
+                    enemy_name = get_enemy(opponents)
+                else:
+                    enemy_name = opponents[0]
+                enemy = battle.get_target(enemy_name)
+            cprint(warrior.get_choice(enemy, decisions), 'blue', 'on_grey')
+            if battle.is_dead(enemy):
+                print(enemy_name, 'is dead...')
+        if len(battle.fighters) == 1:
+            print('{} WINS'.format(battle.fighters[0].name))
+            exit()
 
 
 if __name__ == '__main__':
