@@ -23,12 +23,13 @@ def damage_finder(a, b):
 
 
 class Fighter:
-    def __init__(self, fighter_type, name, damage_low, damage_high):
+    def __init__(self, fighter_type, name, damage_low, damage_high, cpu):
         self.fighter_type = fighter_type
         self.health = 100
         self.name = name
         self.damage_low = damage_low
         self.damage_high = damage_high
+        self.cpu = cpu
 
         rage = {'Saiyan': 60}
         self.rage = rage.get(fighter_type, 20)
@@ -51,12 +52,12 @@ class Fighter:
             attacks *= 2
             other.health = max(other.health - attacks, 0)
             self.rage = 0
-            message = 'CRIT Hit for {}!'.format(attacks)
+            message = 'CRIT Hit for {} on {}'.format(attacks, other.name)
             return message
         else:
             other.health = max(other.health - attacks, 0)
             self.rage = min(100, self.rage + 15)
-            message = 'Hit for {}!'.format(attacks)
+            message = 'Hit for {} on {}!'.format(attacks, other.name)
             return message
 
     def heal(self):
@@ -72,23 +73,23 @@ class Fighter:
             return True
         return False
 
-    def get_choice(self, other, decision):
-        if decision.title().strip() == 'a'.title().strip():
+    def make_move(self, other, decision):
+        if decision == 'a':
             message = self.attack(other)
             return message
-        elif decision.title().strip() == 'h'.title().strip():
+        elif decision == 'h':
             message = self.heal()
             return message
-        elif decision.title().strip() == 't'.title().strip():
+        elif decision == 't':
             message = self.transform()
             return message
-        elif decision.title().strip() == 's'.title().strip():
+        elif decision == 's':
             message = self.skip()
             return message
-        elif decision.title().strip() == 'j'.title().strip():
+        elif decision == 'j':
             message = self.jutsu(other)
             return message
-        elif decision.title().strip() == 'r'.title().strip():
+        elif decision == 'r':
             message = self.hollow_form()
             return message
 
@@ -104,7 +105,7 @@ class Fighter:
             self.damage_high += 10
             self.damage_low += 10
             self.rage = 20
-            message = 'Wow That Is A New Level'
+            message = 'TRANSFORMED! Wow That Is A New Level!!'
             return message
         return message
 
@@ -116,7 +117,8 @@ class Fighter:
             self.damage_low += 5
             self.rage = 10
             other.health -= self.damage_high
-            message = 'Your Jutsu Was Succesful'
+            message = 'Your Jutsu Was Succesful on {} for {} damage'.format(
+                other.name, self.damage_high)
             return message
         return message
 
@@ -131,8 +133,8 @@ class Fighter:
         return message
 
     def possible_actions(self):
-        actions = [['', 'a', 's'], ['', '[a]ttack', '[s]kip']]
-        if self.rage >= 10:
+        actions = [['a', 's', 'a', 'a', 'a'], ['[a]ttack', '[s]kip']]
+        if self.rage >= 10 and self.health < 100:
             actions[0].append('h')
             actions[1].append('[h]eal')
         if self.rage >= 80 and self.fighter_type == 'Saiyan':
@@ -157,22 +159,40 @@ class Battle:
     def __str__(self):
         return '\n'.join(map(str, self.fighters))
 
-    def is_dead(self, warrior):
-        self.fighters = list(filter(lambda f: f.health > 0, self.fighters))
+    def burythedead(self):
+        ''' removes any dead warriors '''
+        has_died = []
         for fighter in self.fighters:
-            if warrior == fighter:
-                if fighter.health <= 0:
-                    self.fighters.remove(fighter)
-                    return True
+            if fighter.health <= 0:
+                has_died.append(fighter.name)
+                self.fighters.remove(fighter)
+        if has_died:
+            return '{} has died and been removed from the arena.'.format(
+                ', '.join(has_died))
 
     def get_target(self, warrior_name):
         for fighter in self.fighters:
             if fighter.name == warrior_name:
                 return fighter
+        raise ValueError('WHOOAH NELLY')
 
-    def get_opponents(self, warrior_name):
+    def get_opponents(self, fighter):
+        ''' returns the string names of all fighters not the attacker '''
         opponents = []
-        for warrior in self.fighters:
-            if warrior != warrior_name:
-                opponents.append(warrior.name)
+        for defender in self.fighters:
+            if defender != fighter:
+                opponents.append(defender)
         return opponents
+
+    def keep_fighting(self):
+        ''' returns true as long as moore than one person remains '''
+        return len(self.fighters) > 1
+
+    def get_next_fighter(self, fighter):
+        """ Return The Next Attacker """
+        index = 0
+        if fighter:
+            index = self.fighters.index(fighter) + 1
+        if index >= len(self.fighters):
+            index = 0
+        return self.fighters[index]
