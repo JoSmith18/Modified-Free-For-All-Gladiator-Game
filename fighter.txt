@@ -1,0 +1,6 @@
+type # rage # specials # possible names # filename
+Saiyan # 60 # Transform # Goku, Trunks, Gohan, Goten, Vegeta # saiyan.txt
+Ninja # 20 # Jutsu # Naruto, Sasuke, Kakashi, Rock Lee, Sakura # ninja.txt
+Soul Reaper # 20 # Rampage # Ichigo, Rukia, Aizen, Byakuya, Head Captain Yamamoto # soul.txt
+Disney # 90 # Power Punch # Mickey Mouse, Minnie Mouse, Donald Duck, PopEye, AstroBoy # disney.txt
+Nickelodeon # 40 # F.U.N # SpongeBob, Patrick, SquidWard, Sandy, Mr.Krabs, Plankton # nick.txt

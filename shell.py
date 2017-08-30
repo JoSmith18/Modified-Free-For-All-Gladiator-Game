@@ -1,77 +1,60 @@
-import sys
+import sys, disk
 from termcolor import colored, cprint
-from core import damage_finder, Fighter, get_class, get_is_dead, Battle
+from core import damage_finder, Fighter, get_class, get_is_dead, Battle, Fighter_World
 from random import choice, randint
 from time import sleep
 
 
-def get_cpu(fighter_names):
-    fighter_type = choice(list(fighter_names.keys()))
+def get_cpu(battle):
+    fighter_type = choice(list(battle.possible_names.keys()))
+    world = battle.get_fighter_world(fighter_type)
     damage_low, damage_high = damage_finder(10, 25)
-    name = fighter_names[fighter_type].pop(
-        randint(0, len(fighter_names[fighter_type]) - 1))
-    if len(fighter_names[fighter_type]) == 0:
-        fighter_names.pop(fighter_type)
-    fighter = Fighter(fighter_type, name, damage_low, damage_high, True)
+    name = battle.possible_names[fighter_type].pop(
+        randint(0, len(battle.possible_names[fighter_type]) - 1))
+    if len(battle.possible_names[fighter_type]) == 0:
+        battle.possible_names.pop(fighter_type)
+    fighter = Fighter(world, name, damage_low, damage_high, True)
     cprint(fighter, 'green', 'on_grey')
     return fighter
 
 
-def get_fighter(text_color, bg_color):
+def get_fighter(battle, text_color, bg_color):
     print(
         colored(
-            '\nWhat Type Of Fighter Would You Like: Saiyan, SoulReaper, or Ninja?\n Saiyan- Starts With Rage Of 60 And Has The Ability To Transform At Rage 90!\n SoulReaper - Starts with rage at 25, and when health gets 25 or lower can rampage which increases his stats!\n Ninja - Starts With Rage 20 And At Rage 50 Can Do A Special Jutsu!\n',
-            'yellow'),
+            '\nWhat Type Of Fighter Would You Like:?\n Saiyan- Starts With Rage Of 60 And Has The Ability To Transform At Rage 90!\n SoulReaper - Starts with rage at 25, and when health gets 25 or lower can rampage which increases his stats!\n Ninja - Starts With Rage 20 And At Rage 50 Can Do A Special Jutsu!\n Disney- Cute Cartoon that starts with major RAGE!!!\n Nickelodeon - Has The Ability When Health Gets To Half To Calm Another Fighter Rage Down!\n',
+            'red', 'on_white'),
         end="")
     fighter_type = ''
-    while fighter_type not in ['Saiyan', 'Soul Reaper', 'Ninja', 'Soul']:
+    while fighter_type not in battle.possible_types:
         print(colored('>>>', 'yellow', attrs=['blink']), end="")
         fighter_type = input(' ').title()
+    world = battle.get_fighter_world(fighter_type)
     name = input("What Is Your Name Fighter: ")
     damage_low, damage_high = damage_finder(10, 25)
-    if fighter_type == 'Soul':
-        fighter_type = 'Soul Reaper'
-    fighter = Fighter(fighter_type, name, damage_low, damage_high, False)
+    fighter = Fighter(world, name, damage_low, damage_high, False)
     setattr(fighter, 'text_color', text_color)
     setattr(fighter, 'bg_color', bg_color)
     cprint(fighter, fighter.text_color, fighter.bg_color, attrs=['bold'])
     return fighter
 
 
-def amount_of_fighters():
+def amount_of_fighters(battle):
     fighters = []
-    fighter_names = {
-        'Saiyan': ['Goku', 'Trunks', 'Gohan', 'Goten', 'Vegeta'],
-        'Ninja': ['Naruto', 'Sasuke', 'Kakashi', 'Rock Lee', 'Sakura'],
-        'Soul Reaper': ['Ichigo', 'Rukia', 'Aizen']
-    }
     while True:
         Vs = input("Will The Fighter Be An AI or Human? enter 'done' to stop\n"
                    ).title().strip()
         if Vs == 'Ai':
-            if len(fighter_names) > 0:
-                current_fighter = get_cpu(fighter_names)
+            if len(battle.possible_names) > 0:
+                current_fighter = get_cpu(battle)
                 fighters.append(current_fighter)
             else:
                 print('no more AI fighters available')
                 continue
         elif Vs == 'Human' [0:len(Vs)]:
-            current_fighter = get_fighter('red', 'on_grey')
+            current_fighter = get_fighter(battle, 'red', 'on_grey')
             fighters.append(current_fighter)
         elif Vs == 'Done' [0:len(Vs)] and len(fighters) > 1:
             break
-    return fighters
-
-
-def get_fighters():
-    fighters = []
-    damage_low, damage_high = damage_finder(10, 25)
-    fighters.append(Fighter('Saiyan', 'Jo', damage_low, damage_high, False))
-    damage_low, damage_high = damage_finder(10, 25)
-    fighters.append(Fighter('Ninja', 'Bob', damage_low, damage_high, False))
-    damage_low, damage_high = damage_finder(10, 25)
-    fighters.append(
-        Fighter('Soul Reaper', 'Tom', damage_low, damage_high, True))
     return fighters
 
 
@@ -82,7 +65,7 @@ def get_move(attacker):
         cprint('>>> {}:'.format(attacker.name), end='')
         move = input(' ')
         if move in moves[0]:
-            if move in ['a', 'j']:
+            if move in ['a', 'j', 'f', 'p']:
                 return move, True
             else:
                 return move, None
@@ -116,7 +99,10 @@ def decide_move(attacker, opponents):
 
 
 def main():
-    battle = Battle(amount_of_fighters())
+    battle = Battle([], disk.unlock_fighters())
+    battle.set_possible_fighter_names()
+    battle.set_possible_fighter_types()
+    battle.fighters = amount_of_fighters(battle)
     print(battle, end='\n\n')
     attacker = None
     while battle.keep_fighting():
@@ -131,9 +117,15 @@ def main():
         if s:
             cprint(s, 'red')
     cprint(
-        '************************\n\n{} WINS'.format(battle.fighters[0].name),
-        'green')
-    cprint('\n\n************************', 'green')
+        '*********************************************************',
+        'green',
+        attrs=['reverse'])
+    cprint(battle.fighters[0].art, 'green')
+    cprint('{} WINS'.format(battle.fighters[0].name), 'green', attrs=['blink'])
+    cprint(
+        '*********************************************************',
+        'green',
+        attrs=['reverse'])
     exit()
 
 

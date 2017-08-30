@@ -22,17 +22,28 @@ def damage_finder(a, b):
     return min(d1, d2), max(d1, d2)
 
 
-class Fighter:
-    def __init__(self, fighter_type, name, damage_low, damage_high, cpu):
+class Fighter_World:
+    def __init__(self, fighter_type, rage, possible_names, art):
         self.fighter_type = fighter_type
+        self.rage = rage
+        self.possible_names = possible_names
+        self.art = art
+
+
+class Fighter:
+    def __init__(self, fighter_world, name, damage_low, damage_high, cpu):
+        self.fighter_type = fighter_world.fighter_type
         self.health = 100
         self.name = name
         self.damage_low = damage_low
         self.damage_high = damage_high
+        self.rage = fighter_world.rage
         self.cpu = cpu
+        self.art = fighter_world.art
 
-        rage = {'Saiyan': 60}
-        self.rage = rage.get(fighter_type, 20)
+        # rage = {'Mar'}
+        # rage = {'Saiyan': 60}
+        # self.rage = rage.get(fighter_type, 20)
 
     def __str__(self):
         return '{} {}| Health: {}| Rage: {}'.format(
@@ -92,6 +103,11 @@ class Fighter:
         elif decision == 'r':
             message = self.hollow_form()
             return message
+        elif decision == 'p':
+            message = self.powerpunch(other)
+        elif decision == 'f':
+            message = self.song_attack(other)
+        return message
 
     def skip(self):
         self.rage += 30
@@ -117,9 +133,25 @@ class Fighter:
             self.damage_low += 5
             self.rage = 10
             other.health -= self.damage_high
-            message = 'Your Jutsu Was Succesful on {} for {} damage'.format(
+            message = 'Your Jutsu Was Successful on {} for {} damage'.format(
                 other.name, self.damage_high)
             return message
+        return message
+
+    def song_attack(self, other):
+        message = 'Was Not Successful'
+        if self.health <= 50:
+            self.damage_low += 5
+            self.damage_high += 5
+            other.rage -= 40
+            message = 'It Was A Success'
+        return message
+
+    def powerpunch(self, other):
+        message = 'Not Enough Rage'
+        if self.rage >= 60:
+            other.health -= 30
+            message = 'Successful Hit for 30'
         return message
 
     def hollow_form(self):
@@ -133,7 +165,7 @@ class Fighter:
         return message
 
     def possible_actions(self):
-        actions = [['a', 's', 'a', 'a', 'a'], ['[a]ttack', '[s]kip']]
+        actions = [['a', 's', 'a', 'a', 'a', 'a'], ['[a]ttack', '[s]kip']]
         if self.rage >= 10 and self.health < 100:
             actions[0].append('h')
             actions[1].append('[h]eal')
@@ -146,15 +178,22 @@ class Fighter:
         if self.health <= 25 and self.fighter_type == 'Soul Reaper':
             actions[0].append('r')
             actions[1].append('[r]ampage')
+        if self.rage >= 60 and self.fighter_type == 'Disney':
+            actions[0].append('p')
+            actions[1].append('[p]owerpunch')
+        if self.health <= 50 and self.fighter_type == 'Nickelodeon':
+            actions[0].append('f')
+            actions[1].append('[F]UN')
         return actions
 
 
 class Battle:
     """ list of figthers to take part in a free for all battle """
 
-    def __init__(self, fighters):
+    def __init__(self, fighters, possible_fighters):
         '([Fighters]) -> None'
         self.fighters = fighters
+        self.possible_fighters = possible_fighters
 
     def __str__(self):
         return '\n'.join(map(str, self.fighters))
@@ -196,3 +235,30 @@ class Battle:
         if index >= len(self.fighters):
             index = 0
         return self.fighters[index]
+
+    def set_possible_fighter_names(self):
+        ''' -> {str: [str]} 
+        returns a dicitonary of possible fighter names 
+        '''
+        self.possible_names = {
+            warrior.fighter_type: warrior.possible_names
+            for warrior in self.possible_fighters
+        }
+
+    def set_possible_fighter_types(self):
+        ''' -> {str: [str]} 
+        returns a dicitonary of possible fighter names 
+        '''
+        self.possible_types = [
+            warrior.fighter_type for warrior in self.possible_fighters
+        ]
+
+    def get_fighter_world(self, fighter_type):
+        for world in self.possible_fighters:
+            if fighter_type == world.fighter_type:
+                return world
+
+    def get_description(self):
+        for descript in self.get_fighter_world(self.fighter_type):
+            return 'What Type Of Fighter Would You Like? {}-*{}'.format(
+                self.possible_types, descript.description)
