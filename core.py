@@ -165,23 +165,58 @@ class Fighter:
         return message
 
     def possible_actions(self):
-        actions = [['a', 's', 'a', 'a', 'a', 'a'], ['[a]ttack', '[s]kip']]
+        actions = [['a', 's', 'a', 'a', 'a', 'a', 'a'], ['[a]ttack', '[s]kip']]
         if self.rage >= 10 and self.health < 100:
             actions[0].append('h')
             actions[1].append('[h]eal')
         if self.rage >= 80 and self.fighter_type == 'Saiyan':
             actions[0].append('t')
+            actions[0].append('t')
+            actions[0].append('t')
+            actions[0].append('t')
+            actions[0].append('t')
+            actions[0].append('t')
+            actions[0].append('t')
+            actions[0].append('t')
+            actions[0].append('t')
             actions[1].append('[t]ransform')
-        if self.rage >= 40 and self.fighter_type == 'Ninja':
+        if self.rage >= 50 and self.fighter_type == 'Ninja':
+            actions[0].append('j')
+            actions[0].append('j')
+            actions[0].append('j')
+            actions[0].append('j')
+            actions[0].append('j')
+            actions[0].append('j')
+            actions[0].append('j')
+            actions[0].append('j')
             actions[0].append('j')
             actions[1].append('[j]utsu')
         if self.health <= 25 and self.fighter_type == 'Soul Reaper':
             actions[0].append('r')
+            actions[0].append('r')
+            actions[0].append('r')
+            actions[0].append('r')
+            actions[0].append('r')
+            actions[0].append('r')
+            actions[0].append('r')
             actions[1].append('[r]ampage')
         if self.rage >= 60 and self.fighter_type == 'Disney':
             actions[0].append('p')
+            actions[0].append('p')
+            actions[0].append('p')
+            actions[0].append('p')
+            actions[0].append('p')
+            actions[0].append('p')
+            actions[0].append('p')
+            actions[0].append('p')
             actions[1].append('[p]owerpunch')
         if self.health <= 50 and self.fighter_type == 'Nickelodeon':
+            actions[0].append('f')
+            actions[0].append('f')
+            actions[0].append('f')
+            actions[0].append('f')
+            actions[0].append('f')
+            actions[0].append('f')
             actions[0].append('f')
             actions[1].append('[F]UN')
         return actions
