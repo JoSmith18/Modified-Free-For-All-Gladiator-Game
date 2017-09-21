@@ -8,15 +8,9 @@ This is an Object Oriented Programming game, and I modeled it after a similar
 application using a Dictionary data structure. 
 
 It has:
-
-
-*class FighterWorld* where the gameplay takes place.
-
-
-*class Fighter* where the fighter attributes are given.
-
-
-*class Battle* where the battle is set up.
+  *class FighterWorld* where the gameplay takes place.
+  *class Fighter* where the fighter attributes are given.
+  *class Battle* where the battle is set up.
 
 ___
 
