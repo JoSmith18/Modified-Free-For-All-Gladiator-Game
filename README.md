@@ -1,14 +1,25 @@
 # Free For All Gladiator Game
 ___
 ## About This Project
-This is a terminal based game written in python3.5. This is an Object-Oriented-Programming game that gets the recieves 
+This is a terminal based game written in python3.5
+This is an Object Oriented Programming game, and I modeled it after a similar application using a Dictionary data structure. 
+
+It has:
+*class FighterWorld* where the gameplay takes place.
+*class Fighter* where the fighter attributes are given.
+*class Battle* where the battle is set up.
+
 ___
 
 ## Getting Started
-clone this repository to your local machine 
-[https://pypi.python.org/pypi/termcolor]
-``` >>> pip3 install termcolor```
-``` >>> python3 shell.py```
+clone this repository to your local machine to play the game
+
+this application uses termcolor, so you will need to install that.
+termcolor documentation: [https://pypi.python.org/pypi/termcolor]
+```$ pip3 install termcolor```
+
+the user interactions are programmed in the shell
+```/Modified-Free-For-All-Gladiator-Game $ python3 shell.py```
 ___
 
 ## Using the Application
