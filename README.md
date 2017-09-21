@@ -7,7 +7,7 @@ This is a terminal based game written in python3.5
 This is an Object Oriented Programming game, and I modeled it after a similar 
 application using a Dictionary data structure. 
 
-It has:
+It has:<br>
 * *class FighterWorld* where the gameplay takes place.
 * *class Fighter* where the fighter attributes are given.
 * *class Battle* where the battle is set up.
@@ -17,14 +17,15 @@ ___
 ## Getting Started
 clone this repository to your local machine to play the game
 
+
 this application uses termcolor, so you will need to install that.
 
 
-termcolor documentation: [https://pypi.python.org/pypi/termcolor]\n
+termcolor documentation: [https://pypi.python.org/pypi/termcolor]<br>
 ```$ pip3 install termcolor```
 
 
-the user interactions are programmed in the shell\n
+the user interactions are programmed in the shell<br>
 ```/Modified-Free-For-All-Gladiator-Game $ python3 shell.py```
 ___
 
