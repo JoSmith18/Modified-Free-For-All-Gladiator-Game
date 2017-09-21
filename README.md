@@ -8,9 +8,9 @@ This is an Object Oriented Programming game, and I modeled it after a similar
 application using a Dictionary data structure. 
 
 It has:
-  *class FighterWorld* where the gameplay takes place.
-  *class Fighter* where the fighter attributes are given.
-  *class Battle* where the battle is set up.
+* *class FighterWorld* where the gameplay takes place.
+* *class Fighter* where the fighter attributes are given.
+* *class Battle* where the battle is set up.
 
 ___
 
@@ -20,15 +20,11 @@ clone this repository to your local machine to play the game
 this application uses termcolor, so you will need to install that.
 
 
-termcolor documentation: [https://pypi.python.org/pypi/termcolor]
-
-
+termcolor documentation: [https://pypi.python.org/pypi/termcolor]\n
 ```$ pip3 install termcolor```
 
 
-the user interactions are programmed in the shell
-
-
+the user interactions are programmed in the shell\n
 ```/Modified-Free-For-All-Gladiator-Game $ python3 shell.py```
 ___
 
