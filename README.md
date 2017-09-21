@@ -43,7 +43,4 @@ When health is zero the fighter is taken out of the arena and no longer has a tu
 
 
 ## What I Learned
-This was my first time implementing classes into an application.
-
-
-I learned the use of termcolor.
+This was my first time implementing classes into an application. The only thing different I used with classes was inheritance which allowed me to use methods from a base class. To make the program flashy I learned termcolor.
