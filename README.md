@@ -5,11 +5,11 @@ This is a terminal based game written in python3.5
 
 
 This is an Object Oriented Programming game, and I modeled it after a similar 
-
-
 application using a Dictionary data structure. 
 
 It has:
+
+
 *class FighterWorld* where the gameplay takes place.
 
 
